@@ -121,18 +121,16 @@ def process_link(url_dom, parsed_url) -> tuple[str | None, str | None]:
 def get_announcement(
     url: str,
     start_page: int = 1,
-    max_page: int = 1,
+    end_page: int = 1,
 ) -> list[dict]:
     """
     從指定 URL 獲取公告列表。
-
-    這個函式從給定的 URL 開始，根據 `max_page` 參數，爬取多個頁面的公告資訊。
     它會處理分頁 URL，發送 HTTP 請求，解析 HTML 內容，並提取公告的標題、連結、日期和 Unix 時間戳記。
 
     Args:
         url: 公告列表頁面的基礎 URL。
         start_page: 起始爬取頁數，預設為 1。
-        max_page: 最大爬取頁數，預設為 1。如果 `max_page` 大於 1，則會爬取多個分頁。
+        end_page: 最後爬取頁數，預設為 1。
 
     Returns:
         一個包含公告資訊的列表，每個元素是一個字典
@@ -142,8 +140,7 @@ def get_announcement(
         HTTPException: 當 HTTP 請求失敗時，會拋出 HTTPException，包含錯誤碼和錯誤訊息。
     """
     page_list = [
-        replace_numbers_in_url(url, str(i))
-        for i in range(start_page, start_page + max_page)
+        replace_numbers_in_url(url, str(i)) for i in range(start_page, end_page + 1)
     ]
     data = []
     try:
